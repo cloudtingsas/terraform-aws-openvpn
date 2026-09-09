@@ -1,0 +1,27 @@
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+
+# Variables reales
+terraform.tfvars
+*.auto.tfvars
+*.auto.tfvars.json
+
+# Credenciales / VPN
+*.pem
+*.key
+*.ovpn
+
+# Variables de entorno
+.env
+.env.*
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/

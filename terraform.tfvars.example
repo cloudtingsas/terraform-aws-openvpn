@@ -1,0 +1,16 @@
+aws_region = "us-east-1"
+
+# Reemplazar por los valores reales de la cuenta/VPC.
+vpc_id    = "vpc-xxxxxxxxxxxxxxxxx"
+vpc_cidr  = "10.60.0.0/16"
+subnet_id = "subnet-xxxxxxxxxxxxxxxxx"
+
+name_prefix = "BastionOpenVPN"
+key_name    = "BastionOpenVPN"
+
+# Opcional: si lo dejas null, Terraform detecta tu IP publica actual para SSH.
+# ssh_allowed_cidr = "x.x.x.x/32"
+
+openvpn_allowed_cidrs = ["0.0.0.0/0"]
+initial_client_name   = "cliente1"
+create_eip            = true
