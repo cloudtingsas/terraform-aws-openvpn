@@ -201,7 +201,7 @@ SYSCTL_CONF
 sysctl --system
 
 # NAT optimizado con nftables: los servidores privados ven el trafico desde la IP privada del bastion.
-IFACE=$(ip route | awk '/default/ {print $5; exit}')
+IFACE=$(ip route show default | awk '!found {print $5; found=1}')
 cat > /etc/nftables.conf <<NFT_CONF
 #!/usr/sbin/nft -f
 flush ruleset
