@@ -154,12 +154,17 @@ EASYRSA_BATCH=1 ./easyrsa sign-req server server
 EASYRSA_BATCH=1 ./easyrsa gen-req ${var.initial_client_name} nopass
 EASYRSA_BATCH=1 ./easyrsa sign-req client ${var.initial_client_name}
 
+# CRL para revocar clientes. Si la CRL vence, OpenVPN rechaza a TODOS los clientes: vigencia de 10 anos.
+EASYRSA_BATCH=1 EASYRSA_CRL_DAYS=3650 ./easyrsa gen-crl
+
 cp pki/ca.crt /etc/openvpn/server/ca.crt
 cp pki/issued/server.crt /etc/openvpn/server/server.crt
 cp pki/private/server.key /etc/openvpn/server/server.key
 cp pki/dh.pem /etc/openvpn/server/dh.pem
 openvpn --genkey secret /etc/openvpn/server/tls-crypt.key
 chmod 600 /etc/openvpn/server/server.key /etc/openvpn/server/tls-crypt.key
+# OpenVPN relee la CRL en cada conexion como nobody: debe ser legible por todos.
+install -m 644 pki/crl.pem /etc/openvpn/server/crl.pem
 
 cat > /etc/openvpn/server/server.conf <<'OVPN_SERVER_CONF'
 port ${var.openvpn_port}
@@ -171,6 +176,7 @@ cert server.crt
 key server.key
 dh dh.pem
 tls-crypt tls-crypt.key
+crl-verify crl.pem
 
 server ${var.vpn_cidr_network} ${var.vpn_cidr_netmask}
 topology subnet
